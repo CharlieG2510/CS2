@@ -1,0 +1,92 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import string
+
+
+def insert_file_here(file_name):
+    '''
+    Description:Takes a text file, gets rid of useless words and then says which important words are used the most
+    Arguments: file_name(str) - puts in the name of the txt file being checked
+    Returns: Pie chart with the biggest words
+    '''
+    try:
+        with open (file_name, 'r') as file:
+
+            counts = dict()
+            for line in file:
+                #Get rid of punctuation
+                line = line.translate(line.maketrans("", "", string.punctuation))
+                line = line.lower()
+                words = line.split()
+                for word in words:
+                    if word not in counts:
+                        counts[word] = 1
+                    else:
+                        #adds 1 to value in dictionary
+                        counts[word] += 1
+            
+            
+            #Puts dictionary in decreasing order of value
+            sorted_data = {k: v for k, v in sorted(counts.items(), key=lambda item: item[1], reverse=True)}
+            #List with all the uselss words not wanted
+            words_to_remove = ['the', 'i', 'a ', 'an', 'he', 'she', 'they', 'of', 'that', 'my', 'you', 'me', 'is', 'than', 'there', 'their', 'theyre', 'in', 'not', 'be', 'him', 'it', 'for', 'with', 'this', 'your', 'youre', 'and', 'but', 'will', 'as', 'have', 'thou', 'so', 'what', 'sir', 'a', 'to', 'belch', 'no', 'do', 'his', 'thy', 'if', 'o', 'her', 'thee', 'by', 'am', 'are', 'shall', 'lady', 'let', 'come', 'now', 'well', 'on', 'man', 'woman', 'more', 'would', 'could', 'how', 'one', 'at', 'enter', 'all', 'or', 'we', 'go', 'know', 'here', 'make', 'some', 'say', 'did', 'do', 'from', 'then', 'hath', 'our', 'which']
+
+            #Code that checks if a word is in that list above, remove it
+            for word in words_to_remove:
+                if word in sorted_data:
+                    del sorted_data[word]
+            new_dict = dict()
+            count = 0
+            limit = 15
+            #grabbing the biggest 15 words and putting them in a new dictionary
+            for key, value in sorted_data.items():
+                if count < limit:
+                    print(f"{key}: {value}")
+                    new_dict.update(({key: value}))
+                    count += 1
+                else:
+                    break
+            
+            #Making the key and values in lists ot be used for a pie chart
+            data = []
+            labels = []
+            for key, value in new_dict.items():
+                labels.append(key)
+                data.append(value)
+
+            #For pie chart (1st one is the data part, the second is the labels, third can be color or other things)
+            plt.pie(data, labels = labels)
+
+            # Adding title
+            plt.title('Most Used words in Text and How many times they were used')
+
+            # Display the plot
+            plt.show()
+            
+
+            
+            
+
+
+            
+            
+                    
+
+    except FileNotFoundError:
+        print('file not found')
+
+
+
+def main():
+    option = input('do u want twelth night of romeo and juliet(1 for tn and 2 for r&j)')
+    if option == '1':
+        (insert_file_here('tn.txt'))
+    elif option == '2':
+        (insert_file_here('rad.txt'))
+    else:
+        print('not an option')
+
+
+
+
+main()
