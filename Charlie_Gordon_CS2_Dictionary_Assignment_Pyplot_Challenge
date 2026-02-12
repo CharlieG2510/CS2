@@ -1,0 +1,117 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import string
+import plotly.express as px
+import plotly.graph_objects as go
+
+'''
+Name: Charlie Gordon
+Description: Reads txt files and syas what the most popular word is
+Date: 2/12/26
+Bugs: N/A
+Sources: pyplot, w3 schools
+Log: 1.0
+'''
+
+
+def insert_file_here(file_name):
+    '''
+    Description:Takes a text file, gets rid of useless words and then says which important words are used the most
+    Arguments: file_name(str) - puts in the name of the txt file being checked
+    Returns: Pie chart with the biggest words
+    '''
+    try:
+        #reading txt.file
+        with open (file_name, 'r') as file:
+
+            #Create empty dictionary
+            counts = dict()
+            for line in file:
+                #Get rid of punctuation
+                line = line.translate(line.maketrans("", "", string.punctuation))
+                #make it all lower case
+                line = line.lower()
+                #Splits words up in line
+                words = line.split()
+                for word in words:
+                    #If not in the dicionary
+                    if word not in counts:
+                        #Add it and say it has been used 1 time
+                        counts[word] = 1
+                    else:
+                        #adds 1 to value in dictionary
+                        counts[word] += 1
+            
+            
+            #Puts dictionary in decreasing order of value
+            sorted_data = {k: v for k, v in sorted(counts.items(), key=lambda item: item[1], reverse=True)}
+            #List with all the uselss words not wanted
+            words_to_remove = ['the', 'i', 'a ', 'an', 'he', 'she', 'they', 'of', 'that', 'my', 'you', 'me', 'is', 'than', 'there', 'their', 'theyre', 'in', 'not', 'be', 'him', 'it', 'for', 'with', 'this', 'your', 'youre', 'and', 'but', 'will', 'as', 'have', 'thou', 'so', 'what', 'sir', 'a', 'to', 'belch', 'no', 'do', 'his', 'thy', 'if', 'o', 'her', 'thee', 'by', 'am', 'are', 'shall', 'lady', 'let', 'come', 'now', 'well', 'on', 'man', 'woman', 'more', 'would', 'could', 'how', 'one', 'at', 'enter', 'all', 'or', 'we', 'go', 'know', 'here', 'make', 'some', 'say', 'did', 'do', 'from', 'then', 'hath', 'our', 'which', 'very', 'has', 'before', 'great', 'into', 'been', 'again', 'every', 'never', 'back', 'any', 'like', 'thank', 'us', 'who','those','much','today','another','through','when','must']
+
+            #Code that checks if a word is in that list above, remove it
+            for word in words_to_remove:
+                if word in sorted_data:
+                    del sorted_data[word]
+            new_dict = dict()
+            count = 0
+            limit = 15
+            #grabbing the biggest 15 words and putting them in a new dictionary
+            for key, value in sorted_data.items():
+                if count < limit:
+                    #Prints each key and value to the log
+                    print(f"{key}: {value}")
+                    #Adds to new dictionary
+                    new_dict.update(({key: value}))
+                    #Builds count up so it only does this 15 times
+                    count += 1
+                else:
+                    break
+            
+            #Making the key and values in lists ot be used for a pie chart
+            data = []
+            labels = []
+            #Takes each key and value in the new dictionary and puts it into the lists
+            for key, value in new_dict.items():
+                labels.append(key)
+                data.append(value)
+
+            #Put specific colors in piue chart
+            colors = ['red', 'yellow', 'green', 'blue']
+            #What values and labels will be in the pie chart
+            fig = go.Figure(data=[go.Pie(labels=labels,
+                             values=data)])
+            #Makes specific things like the info on top of the chart, the size of the text, and the color of the text
+            fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20, 
+                  marker=dict(colors=colors, line=dict(color='#000000', width=2)))
+            #Adds a title and affects its size
+            fig.update_layout(
+                title_text="Most Used words in Text and How many times they were used",
+                title_x=0.5 # Centers the title (0.5 is the center of the x-axis)
+                )
+            #Load pie chart in plotly (need to reload page for it to show)
+            fig.show()
+    except FileNotFoundError:
+        print('file not found')
+
+
+
+def main():
+    option = input('Do you want twelth night, romeo and juliet, donald trumps innagural adress, or joe bidens innagural adress, or type in your own not here(1 for tn and 2 for r&j and 3 for trump and 4 for biden and 5 for own)')
+    if option == '1':
+        (insert_file_here('tn.txt'))
+    elif option == '2':
+        (insert_file_here('rad.txt'))
+    elif option == '3':
+        (insert_file_here('Tspeech.txt'))
+    elif option == '4':
+        (insert_file_here('Jspeech.txt'))
+    elif option == '5':
+        own_file = input('whats the name of your txt file (remember to add .txt at the end)')
+        (insert_file_here(own_file))
+    else:
+        print('not an option')
+
+
+
+
+main()
