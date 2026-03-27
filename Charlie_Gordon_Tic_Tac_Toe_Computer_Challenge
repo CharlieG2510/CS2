@@ -18,21 +18,6 @@ board = [
          ]
 
 
-def music(sound):
-    '''
-    Desc: Plays a sound effect when called upon
-    Args: Sound(str)
-    Returns: Sound effect
-    '''
-    pygame.init()
-    pygame.mixer.init()
-    pygame.mixer.music.load(sound)
-    pygame.mixer.music.set_volume(0.7)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(9)
-    pygame.quit()
-
 
 
 def ai(board):
@@ -269,65 +254,59 @@ def has_won(board):
     '''
     if board[0][0] == 'x' and board[0][1] == 'x' and board[0][2] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
+        
+        return False
     elif board[0][0] == 'o' and board[0][1] == 'o' and board[0][2] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
+        
+        return False
     
     if board[1][0] == 'x' and board[1][1] == 'x' and board[1][2] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
+        
+        return False
     elif board[1][0] == 'o' and board[1][1] == 'o' and board[1][2] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
+        
+        return False
     
     if board[2][0] == 'x' and board[2][1] == 'x' and board[2][2] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
+        
+        return False
     elif board[2][0] == 'o' and board[2][1] == 'o' and board[2][2] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
+        
+        return False
     
     
 
     elif board[0][0] == 'x' and board[1][0] == 'x' and board[2][0] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
         
+        return False
     elif board[0][0] == 'o' and board[1][0] == 'o' and board[2][0] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
         
+        return False
     
     elif board[0][1] == 'x' and board[1][1] == 'x' and board[2][1] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
         
+        return False
     elif board[0][1] == 'o' and board[1][1] == 'o' and board[2][1] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
         
+        return False
     
     elif board[0][2] == 'x' and board[1][2] == 'x' and board[2][2] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
         
+        return False
     elif board[0][2] == 'o' and board[1][2] == 'o' and board[2][2] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
         
+        return False
 
 
 
@@ -335,32 +314,22 @@ def has_won(board):
 
     elif board[0][0] == 'x' and board[1][1] == 'x' and board[2][2] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
         
+        return False
     elif board[0][0] == 'o' and board[1][1] == 'o' and board[2][2] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
         
+        return False
     
 
     elif board[2][0] == 'x' and board[1][1] == 'x' and board[0][2] == 'x':
         print('x has won yipee')
-        music('Celebration.mp3')
-        sys.exit()
         
+        return False
     elif board[2][0] == 'o' and board[1][1] == 'o' and board[0][2] == 'o':
         print('o has won yipee')
-        music('failure.mp3')
-        sys.exit()
-    
-
-    
-
-
         
-    
+        return False
 
 
 def is_tie(board):
@@ -378,8 +347,8 @@ def is_tie(board):
 {board[0]}
 {board[1]}
 {board[2]}""")
-        music('failure.mp3')
         return True
+    
     
 
     
@@ -406,8 +375,34 @@ def main():
 {board[0]}
 {board[1]}
 {board[2]}""")
-        has_won(board)
+        if has_won(board) == False:
+            p_again = input('Do you want to play again? (y/n)')
+            if p_again == 'y':
+                #reset board      
+                board = [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+            ]
+                #play again
+                continue
+            else:
+                break
+        #If its a tie
         if is_tie(board) == True:
-            break
+            #give user option to play again
+            p_again = input('Do you want to play again? (y/n)')
+            if p_again == 'y':
+                #reset board      
+                board = [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+            ]
+                #play again
+                continue
+            else:
+                #end code
+                break
 main()
 
