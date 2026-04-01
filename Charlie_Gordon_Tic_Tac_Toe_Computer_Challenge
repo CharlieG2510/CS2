@@ -2,14 +2,14 @@
 Name: Charlie Gordon
 Description: Play Tic Tac Toe against an AI
 Date: 4/1/25
-Bugs: N/A
+Bugs: 
 Sources: Mr. Campbell
 Log: 1.0
 '''
 
 import sys
 import random
-import pygame
+
 
 board = [
 ["", "", ""],
@@ -17,6 +17,18 @@ board = [
 ["", "", ""],
          ]
 
+
+def display_board(board):
+     print(f'''
+ 1   2   3
+1 {board[0][0]} | {board[0][1]} | {board[0][2]}
+ -   -   -
+2 {board[1][0]} | {board[1][1]} | {board[1][2]}
+ -   -   -
+3 {board[2][0]} | {board[2][1]} | {board[2][2]}
+
+
+''')
 
 
 
@@ -204,7 +216,7 @@ def ai(board):
 
 
 
-def move(turn, board, player):
+def move(turn, board):
     '''
     Desc: Allows the player to place their move on the board
     Args: Board(list), Turn(str)
@@ -213,13 +225,13 @@ def move(turn, board, player):
     '''
     while True:
         while True:
-            row = input(f'{player}, you are {turn}. what row do you want (type 1, 2 or 3)')
+            row = input(f'you are {turn}. what row do you want (type 1, 2 or 3) ')
             if row == '1' or row == '2' or row == '3':
                 pass
             else:
                 print('impossible')
                 continue
-            column = input('what column do you want(type 1, 2 or 3)')
+            column = input('what column do you want(type 1, 2 or 3) ')
             if column == '1' or column == '2' or column == '3':
                 break
             else:
@@ -234,13 +246,7 @@ def move(turn, board, player):
 
 
 
-print(f"""
 
-{board[0]}
-{board[1]}
-{board[2]}
-
-""")
 
 
 
@@ -356,53 +362,94 @@ def is_tie(board):
 
 
 def main():
-    player = input('what is your name')
-    
-    turn = 'x'
-    while True:
-        move(turn, board, player)
-        #Prints the board in a way where each list is in 3 in a row
-        print(f"""
-{board[0]}
-{board[1]}
-{board[2]}""")
-        has_won(board)
-        #if its a tie
-        if is_tie(board) == True:
-            break
-        ai(board)
-        print(f"""
-{board[0]}
-{board[1]}
-{board[2]}""")
-        if has_won(board) == False:
-            p_again = input('Do you want to play again? (y/n)')
-            if p_again == 'y':
-                #reset board      
-                board = [
+    #Actual board that will be used to keep track for
+    board = [
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
             ]
-                #play again
-                continue
-            else:
-                break
+
+    turn = 'x'
+    display_board(board)
+    while True:
+        #Have the first player move
+        move(turn, board)
+        #if someone won
+        if has_won(board) == False:
+            while True:   
+                #give user option to play again
+                p_again = input('Do you want to play again? (y/n)')
+                if p_again == 'y':
+                    #reset board      
+                    board = [
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+                ]
+                    #play again
+                    break
+                elif p_again == 'n':
+                    #end code
+                    sys.exit()
+                else:
+                    print('invalid response')
         #If its a tie
         if is_tie(board) == True:
-            #give user option to play again
-            p_again = input('Do you want to play again? (y/n)')
-            if p_again == 'y':
-                #reset board      
-                board = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-            ]
-                #play again
-                continue
-            else:
-                #end code
-                break
+            while True:   
+                #give user option to play again
+                p_again = input('Do you want to play again? (y/n)')
+                if p_again == 'y':
+                    #reset board      
+                    board = [
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+                ]
+                    #play again
+                    break
+                elif p_again == 'n':
+                    #end code
+                    sys.exit()
+                else:
+                    print('invalid response')
+        ai(board)
+        display_board(board)
+        if has_won(board) == False:
+            while True:   
+                #give user option to play again
+                p_again = input('Do you want to play again? (y/n)')
+                if p_again == 'y':
+                    #reset board      
+                    board = [
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+                ]
+                    #play again
+                    break
+                elif p_again == 'n':
+                    #end code
+                    sys.exit()
+                else:
+                    print('invalid response')
+        #If its a tie
+        if is_tie(board) == True:
+            while True:   
+                #give user option to play again
+                p_again = input('Do you want to play again? (y/n)')
+                if p_again == 'y':
+                    #reset board      
+                    board = [
+        ["", "", ""],
+        ["", "", ""],
+        ["", "", ""],
+                ]
+                    #play again
+                    break
+                elif p_again == 'n':
+                    #end code
+                    sys.exit()
+                else:
+                    print('invalid response')
 main()
 
