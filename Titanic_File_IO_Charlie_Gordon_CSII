@@ -4,7 +4,8 @@ Description: Takes statisics based of an excel file tlaking about the titanic
 Date: 12/19/25
 Bugs: N/A
 Sources: W3 Schools
-Log: 1.0
+List of Compled Functions:Load and Display, Gender Survival Rate, Calculate Survival Rate, Age Analysis, Class-Based Analysis, Family Survival Patterns, Date Visualization, Comprehensive report 
+Log: 2.0 Fixed Documentation and changed some variable names to be clearer or added domcumentation to explain the names
 
 '''
 
@@ -13,39 +14,52 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def LDD(file):
+def load_and_display(file):
     '''
     Desc: Displays first 10 rows of csv
     Args: file(csv)
     Returns: first_ten_rows.csv (csv)
-    
     '''
+    #Send the file to the first line
     file.seek(1)
     counter = 0
     
+    #For every line
     for line in file:
+        #If 10 lines have been added
         if counter > 10:
                 break
         else:
             #Makes a new csv file
             with open('first_ten_rows.csv', 'a') as tenfile:
+                 #Adds to that csv file
                  tenfile.write(line)
             counter = counter + 1
         
 
 
 def calc_surv(file):
+    '''
+    Desc: Calaculated the survival rate of people on the titanic
+    Args: file(csv)
+    Returns: surv_calc.csv (csv)
+    
+    '''
+    #Send file to the first line
     file.seek(1)
     counter = 0
     survival_counter = 0
     
     
-    
     for line in file:
+        #Add one to the amount of people on the boat
         counter = counter + 1
+        #Splits the line base don where , are which is automaticly used to devide csv files in excel
         row = line.strip().split(',')
+        #If the passanger survived
         if row[1] == '1':
                 survival_counter = survival_counter + 1
+    #Subtract one because the first column is descriptive
     num_of_ppl = counter - 1
     survival_rate = survival_counter/num_of_ppl
     #Allows you to add multiple columns to an excel
@@ -54,7 +68,7 @@ def calc_surv(file):
     
     
     
-    
+    #Make csv and add to it
     with open('surv_calc.csv', 'w') as surv_calc_file:
         surv_calc_file.write(columns)
             
@@ -75,6 +89,7 @@ def gender(file):
     Returns: gender.csv (csv)
     
     '''
+    #Send file to the first line
     file.seek(1)
     men = 0
     women = 0
@@ -82,21 +97,27 @@ def gender(file):
     women_survived = 0
 
     for line in file:
+                #Devided the line by , which devides csv files
                 row = line.strip().split(',')
+                #the fifth column in the csv is the passangers sex
                 sex = row[5]
                 if sex == 'male':
                         men = men + 1
+                        #If the man survived
                         if row[1] == '1':
                             men_survived = men_survived + 1
 
                 elif sex == 'female':
                         women = women + 1
+                        #If the woman survived
                         if row[1] == '1':
                             women_survived = women_survived + 1
                 
+    #Make columns which will be added to a new file
     columns = f'''percentage of women who survived,   percentage of men who survived,
     {((women_survived/women)*100):.2f}%,   {((men_survived/men)*100):.2f}%'''
 
+     #Make a new csv file and add the columns above into it
     with open('gender.csv', 'w') as gender_file:
          gender_file.write(columns)
 
@@ -107,39 +128,65 @@ def age_analysis(file):
     Returns: age_analysis.csv (csv)
     
     '''
+     
+
+     #Finds Average Age
+
+
+     #Go to top of file
      file.seek(1)
      counter = 0
      total_age = 0
      for line in file:
+        #Devide file based off of ,
         row = line.strip().split(',')
+        #If there is an issue with the age column not being able to be turned into an int
         try:
+             #Add based on how many passangers are on the ship
              counter = counter + 1
+             #Age is the numerical value in row 7 (6 becuase this starts at 0) of the titanic file
              age = int(row[6])
+             #Adds to the toal age of passangers
              total_age = total_age + age
         except ValueError:
              pass
         
      average_age = total_age/counter
 
+
+     #Start biggest age at 0 so that any of them will be bigger and replace it
      biggest_age = 0
+     #Go to top of file
      file.seek(1)
+     #For revery passanger on the boat
      for line in file:
+          #If there is an issue with the age column not being able to be turned into an int
           try:
+               #Divide the line
                row = line.strip().split(',')
+               #Find the age column in the csv
                age = int(row[6])
+               #If the age there is bigger than the value already there
                if age > biggest_age:
+                    #That becomes the new biggest age
                     biggest_age = age
           except ValueError:
                pass
+     #Creates variable
      smallest_age = 0
      file.seek(1)
+     #For every pasanger
      for line in file:
+          #If there is an issue with the age column not being able to be turned into an int
           try:
+               #Devide line
                row = line.strip().split(',')
                age = int(row[6])
+               #If the for loop is on its first go around
                if smallest_age == 0:
                     smallest_age = age
                else:
+                    #If this person is younger than the person the variable smallest age assumes is the smallest age
                     if age < smallest_age:
                          smallest_age = age
           except ValueError:
@@ -150,30 +197,40 @@ def age_analysis(file):
      survivor_total_age = 0
      non_survivors = 0
      non_survivor_total_age = 0
+     #Go to top of file
      file.seek(1)
+     #For every passanger
      for line in file:
+          #If there is an issue with the age column not being able to be turned into an int
           try:
-          
+               #Devide the line
                row = line.strip().split(',')
                survived = row[1]
                age = int(row[6])
+               #If the passanger survived
                if survived == ('1'):
                     survivors = survivors + 1
+                    #Add there age to the total survival age
                     survivor_total_age = survivor_total_age + age
+               #If the passanger died
                elif survived == ('0'):
                     non_survivors = non_survivors + 1
+                    #add there age to the total dead age
                     non_survivor_total_age = non_survivor_total_age + age
           except ValueError:
                pass
+     #Find the average age of survivors and non_survivors
      average_survivor_age = survivor_total_age/survivors
      average_non_survivor_age = non_survivor_total_age/non_survivors
           
 
 
+     #Makes columsn that to be written later (done like this in order to have multiple columns)
      columns = f'''Average Age of Passangers, Average Age of Survivors, Average Age of Non-Survivors, Youngest Passanger, Oldest Passanger,
      {average_age:.2f}, {average_survivor_age:.2f}, {average_non_survivor_age:.2f}, {smallest_age}, {biggest_age}
      '''
 
+     #Make a new csv and put the columns above in it
      with open('age_analysis.csv', 'w') as age_file:
           age_file.write(columns)
 def classanalysis(file):
@@ -183,7 +240,10 @@ def classanalysis(file):
     Returns: class_analysis.csv (csv)
     
     '''
+     
+     #Go to top of file
      file.seek(1)
+     #Variables contianing all the classes, which of those classes survived, and the total fare
      first_class = 0
      second_class = 0
      third_class = 0
@@ -194,52 +254,69 @@ def classanalysis(file):
      second_class_fare = 0
      third_class_fare = 0
 
+     #For every passanger
      for line in file:
+                #Devide the file
                 row = line.strip().split(',')
+                #Each passanger class is found in row 2 of the line
                 pbclass = row[2]
+                #If they are in first class
                 if pbclass == '1':
                         first_class = first_class + 1
+                        #If there is an issue with the column not being able to be turned into an int
                         try:
+                             #Add there fare (found in row 10) to the first class fare total
                              fare = float(row[10])
                              first_class_fare = first_class_fare + fare
                         except ValueError:
                              pass
+                        #If they survived
                         if row[1] == '1':
+                            #Add them to toal survied rate as well
                             first_class_survived = first_class_survived + 1
 
+                #If they were second class
                 elif pbclass == '2':
                         second_class = second_class + 1
+                        #If there is an issue with the column not being able to be turned into an int
                         try:
+                             #Add there fare to the total second class fare
                              fare = float(row[10])
                              second_class_fare = second_class_fare + fare
                         except ValueError:
                              pass
+                        #Check if they sruvived and if htey did add them to the variable
                         if row[1] == '1':
                             second_class_survived = second_class_survived + 1
+                #If they were third class
                 elif pbclass == '3':
                         third_class = third_class + 1
+                        #If there is an issue with the column not being able to be turned into an int
                         try:
+                             #Add there fare to the third class total
                              fare = float(row[10])
                              third_class_fare = third_class_fare + fare
                         except ValueError:
                              pass
+                        #If they survived add them to the variable
                         if row[1] == '1':
                             third_class_survived = third_class_survived + 1
      
-     afcsr = first_class_survived/first_class
-     ascsr = second_class_survived/second_class
-     atcsr = third_class_survived/third_class
+     #Find the averages of the fares and survival rates for first, second, and third class
+     avg_first_class_survival_rate = first_class_survived/first_class
+     avg_second_class_survival_rate = second_class_survived/second_class
+     avg_third_class_survival_rate = third_class_survived/third_class
 
 
-     afcf = first_class_fare/first_class
-     ascf = second_class_fare/second_class
-     atcf = third_class_fare/third_class
+     avg_first_class_fare = first_class_fare/first_class
+     avg_second_class_fare = second_class_fare/second_class
+     avg_third_class_fare = third_class_fare/third_class
 
-     
+     #Columsn to add to a new csv file (:.2f makes it so only 2 points over are printed)
      columns = f'''Survival Rate of First Class, Survival Rate of Second Class, Survival Rate of Third Class, Average Fare of First Class, Average Fare of Second Class, Average Fare of Third Class,
-     {(afcsr*100):.2f}, {(ascsr*100):.2f}, {(atcsr*100):.2f}, {afcf:.2f}, {ascf:.2f}, {atcf:.2f}
+     {(avg_first_class_survival_rate*100):.2f}, {(avg_second_class_survival_rate*100):.2f}, {(avg_third_class_survival_rate*100):.2f}, {avg_first_class_fare:.2f}, {avg_second_class_fare:.2f}, {avg_third_class_fare:.2f}
      '''
-
+     #Make a new file and put the columns put above in
      with open('Class_Analysis.csv', 'w') as Class_file:
           Class_file.write(columns)
 
@@ -250,34 +327,44 @@ def famanalysis(file):
     Returns: family_analysis.csv (csv)
     
     '''
+     #Go to the top of the file
      file.seek(1)
      non_family = 0
      non_family_survived = 0
      family_ppl = 0
      family_ppl_survived = 0
 
+     #For every passanger
      for line in file:
+               #If there is an issue with the column not being able to be turned into an int
                try:
+                    #devide the line
                     row = line.strip().split(',')
+                    #The size of the family to found by combining th esiblings in row 7 and parents/children in row 8
                     family_size = int(row[7]) + int(row[8])
+                    #if the passanger has a family member with them
                     if family_size > 0:
+                         #They are a family person
                          family_ppl = family_ppl + 1
+                         #If they survived
                          if row[1] == '1':
                               family_ppl_survived = family_ppl_survived + 1
+                    #If they were alone
                     else:
                          non_family = non_family + 1
+                         #If they sruvived
                          if row[1] == '1':
                               non_family_survived = non_family_survived + 1
                except ValueError:
                     pass
-     
-     fsr = (family_ppl_survived/family_ppl)*100
-     nfsr = (non_family_survived/non_family)*100
-
+     #Find percentage of people with and without families who survived
+     family_survival_rate = (family_ppl_survived/family_ppl)*100
+     non_family_survival_rate = (non_family_survived/non_family)*100
+     #make columns that will be added to new csv file
      columns = f'''Survival Rate of Families, Survival Rate of Solo Passangers,
-     {(fsr):.2f}%, {(nfsr):.2f}%
+     {(family_survival_rate):.2f}%, {(non_family_survival_rate):.2f}%
      '''
-
+     #make a new csv file and add the column above
      with open('Family_Analysis.csv', 'w') as Fam_file:
           Fam_file.write(columns)
 
@@ -288,6 +375,11 @@ def data_visulation(file):
     Returns: 2 Bars (Men and women survival rates, class survival rate) and a Histogram(ages on titanic)
     
     '''
+     
+
+     #Gender survival rate bar
+
+     #Same code as gender sruvival rate function
      file.seek(1)
      men = 0
      women = 0
@@ -309,14 +401,22 @@ def data_visulation(file):
      
      men_survival_rate = (men_survived/men)*100
      women_survival_rate = (women_survived/women)*100    
-     #Makes bars
+     
+     
+     #Makes x and y value for the bar
+     
      x = np.array(['Men Survival %', 'Women Survival %'])
      y = np.array([int(men_survival_rate), int(women_survival_rate)])
 
-     #Displays bars
+     #Displays bars and gives it a title
      plt.bar(x,y)
+     plt.title('Gender Survival Rate')
      plt.show()
 
+
+     #Class survival rate bar
+
+     #Same code as class analysis
      file.seek(1)
      first_class = 0
      second_class = 0
@@ -342,27 +442,39 @@ def data_visulation(file):
                         if row[1] == '1':
                             third_class_survived = third_class_survived + 1
      
-     afcsr = first_class_survived/first_class
-     ascsr = second_class_survived/second_class
-     atcsr = third_class_survived/third_class
+     avg_first_class_survival_rate = first_class_survived/first_class
+     avg_second_class_survival_rate = second_class_survived/second_class
+     avg_third_class_survival_rate = third_class_survived/third_class
 
+
+
+     #Makes the x and y axis for the second bar to be shows (Thats why its called X2 and Y2)
      x2 = np.array(['First Class Survival %', 'Second Class Survial %', 'Third Class Survival %'])
-     y2 = np.array([int(afcsr*100), int(ascsr*100), int(atcsr*100)])
+     y2 = np.array([int(avg_first_class_survival_rate*100), int(avg_second_class_survival_rate*100), int(avg_third_class_survival_rate*100)])
 
+     #Gives it a title, added the x and y to the bar and displays it
+     plt.title('Class Survival Rate')
      plt.bar(x2,y2)
      plt.show()
 
+     #Go back to top of file
      file.seek(1)
      #allows for depository for histogram to look in
      ages = []
+     #For every passanger
      for line in file:
+           #Devide the line
            row = line.strip().split(',')
+           #Check if the age can be turned into an int and if not pass that line
            try:
+                 #Add the age to the list so it can be shown on the histogram
                  ages.append(int(row[6]))
            except ValueError:
                  pass
      #Makes histogram
      plt.hist(ages)
+     plt.title('Ages on the titanic')
+     #Displays the histogram
      plt.show()
 
 def comprehensive_report(file):
@@ -372,6 +484,9 @@ def comprehensive_report(file):
     Returns: Comprehensive_Report.csv (csv)
     
     '''
+     
+
+     #Survival rate part - Same as survival rate function code
      file.seek(1)
      total_p = 0
      survivors = 0
@@ -381,6 +496,9 @@ def comprehensive_report(file):
            if row[1] == '1':
                  survivors = survivors + 1
      survival_rate = (survivors/total_p)*100
+     
+     
+     #Gender survival rate, same as gender sruvival rate function code
      file.seek(1)
      men = 0
      women = 0
@@ -402,6 +520,9 @@ def comprehensive_report(file):
      
      men_survival_rate = (men_survived/men)*100
      women_survival_rate = (women_survived/women)*100
+     
+     
+     #Class analysis, same as class analysis code
      file.seek(1)
      first_class = 0
      second_class = 0
@@ -445,92 +566,111 @@ def comprehensive_report(file):
                         if row[1] == '1':
                             third_class_survived = third_class_survived + 1
      
-     afcsr = first_class_survived/first_class
-     ascsr = second_class_survived/second_class
-     atcsr = third_class_survived/third_class
+     avg_first_clas_survival_rate = first_class_survived/first_class
+     avg_second_clas_survival_rate = second_class_survived/second_class
+     avg_third_clas_survival_rate = third_class_survived/third_class
 
 
-     afcf = first_class_fare/first_class
-     ascf = second_class_fare/second_class
-     atcf = third_class_fare/third_class
 
-
-     afcf = first_class_fare/first_class
-     ascf = second_class_fare/second_class
-     atcf = third_class_fare/third_class
+     #Child/Adult/Senior survival rate - New code
      file.seek(1)
+     #Makes empty variable fors child/adult/senior and survived version to get ther surival rate later
      child = 0
      child_surv = 0
      adult = 0
      adult_surv = 0
      senior = 0
      senior_surv = 0
+     #For every passanger
      for line in file:
+          #If the part of the column needed can be turned into an int
           try:
-          
+               #Devide line
                row = line.strip().split(',')
                survived = row[1]
                age = int(row[6])
+               #If they are a child
                if int(age) < 18:
                     child = child + 1
+                    #If they surivived
                     if survived == "1":
                           child_surv = child_surv + 1
+               #If they are an adult
                elif int(age) < 60:
                      adult = adult + 1
+                     #If they survived
                      if survived == "1":
                            adult_surv = adult_surv + 1
+               #If they are a senior
                else:
                      senior = senior + 1
+                     #If they survived
                      if survived == "1":
                            senior_surv = senior_surv + 1
                     
           except ValueError:
                pass
 
+
+     #Get the rate of each of the age groups survival
      child_surv_rate = (child_surv/child)*100
      adult_surv_rate = (adult_surv/adult)*100
      senior_surv_rate = (senior_surv/senior)*100
 
-     
-     c_fc_m = child_surv_rate + afcsr + men_survival_rate
+     #c=child
+     #a=adult
+     #s=senior
+     #fc=first class
+     #sc=second class
+     #tc=third_class
+     #m=male
+     #f=female
+
+     #Adding together the surivval rates to see whichever one is the highest and therefore was the most likely to survive
+     c_fc_m = child_surv_rate + avg_first_clas_survival_rate + men_survival_rate
      c_fc_m_text = "Child, First Class, Male"
-     c_fc_f = child_surv_rate + afcsr + women_survival_rate
+     c_fc_f = child_surv_rate + avg_first_clas_survival_rate + women_survival_rate
      c_fc_f_text = "Child, First Class, Female"
-     c_sc_m = child_surv_rate + ascsr + men_survival_rate
+     c_sc_m = child_surv_rate + avg_second_clas_survival_rate + men_survival_rate
      c_sc_m_text = "Child, Second Class, Male"
-     c_sc_f = child_surv_rate + ascsr + women_survival_rate
+     c_sc_f = child_surv_rate + avg_second_clas_survival_rate + women_survival_rate
      c_sc_f_text = "Child, Second Class, Male"
-     c_tc_m = child_surv_rate + atcsr + men_survival_rate
+     c_tc_m = child_surv_rate + avg_third_clas_survival_rate + men_survival_rate
      c_tc_m_text = "Child, Third Class, Male"
-     c_tc_f = child_surv_rate + atcsr + women_survival_rate
+     c_tc_f = child_surv_rate + avg_third_clas_survival_rate + women_survival_rate
      c_tc_f_text = "Child, Third Class, Female"
-     a_fc_m = adult_surv_rate + afcsr + men_survival_rate
+     a_fc_m = adult_surv_rate + avg_first_clas_survival_rate + men_survival_rate
      a_fc_m_text = "Adult, First Class, Male"
-     a_fc_f = adult_surv_rate + afcsr + women_survival_rate
+     a_fc_f = adult_surv_rate + avg_first_clas_survival_rate + women_survival_rate
      a_fc_f_text = "Adult, First Class, Female"
-     a_sc_m = adult_surv_rate + ascsr + men_survival_rate
+     a_sc_m = adult_surv_rate + avg_second_clas_survival_rate + men_survival_rate
      a_sc_m_text = "Adult, Second Class, Male"
-     a_sc_f = adult_surv_rate + ascsr + women_survival_rate
+     a_sc_f = adult_surv_rate + avg_second_clas_survival_rate + women_survival_rate
      a_sc_f_text = "Adult, Second Class, Female"
-     a_tc_m = adult_surv_rate + atcsr + men_survival_rate
+     a_tc_m = adult_surv_rate + avg_third_clas_survival_rate + men_survival_rate
      a_tc_m_text = "Adult, Third Class, Male"
-     a_tc_f = adult_surv_rate + atcsr + women_survival_rate
+     a_tc_f = adult_surv_rate + avg_third_clas_survival_rate + women_survival_rate
      a_tc_f_text = "Adult, Third Class, Female"
-     s_fc_m = child_surv_rate + afcsr + men_survival_rate
+     s_fc_m = child_surv_rate + avg_first_clas_survival_rate + men_survival_rate
      s_fc_m_text = "Senior, First Class, Male"
-     s_fc_f = senior_surv_rate + afcsr + women_survival_rate
+     s_fc_f = senior_surv_rate + avg_first_clas_survival_rate + women_survival_rate
      s_fc_f_text = "Senior, First Class, Female"
-     s_sc_m = senior_surv_rate + ascsr + men_survival_rate
+     s_sc_m = senior_surv_rate + avg_second_clas_survival_rate + men_survival_rate
      s_sc_m_text = "Senior, Second Class, Male"
-     s_sc_f = senior_surv_rate + ascsr + women_survival_rate
+     s_sc_f = senior_surv_rate + avg_second_clas_survival_rate + women_survival_rate
      s_sc_f_text = "Senior, Second Class, Female"
-     s_tc_m = senior_surv_rate + atcsr + men_survival_rate
+     s_tc_m = senior_surv_rate + avg_third_clas_survival_rate + men_survival_rate
      s_tc_m_text = "Senior, Third Class, Male"
-     s_tc_f = senior_surv_rate + atcsr + women_survival_rate
+     s_tc_f = senior_surv_rate + avg_third_clas_survival_rate + women_survival_rate
      s_tc_f_text = "Senior, Third Class, Female"
 
+
+     #Which ever one of those survival rates adds up to be the highest was the most likely demographic to win (percentages added up to be the most)
      highest_surv_rate = max(c_fc_m, c_fc_f, c_sc_m, c_sc_f, c_tc_m, c_tc_f, a_fc_m, a_fc_f, a_sc_m, a_sc_f, a_tc_m, a_tc_f, s_fc_m, s_fc_m, s_sc_m, s_sc_f, s_tc_m, s_tc_f)
      highest_surv_rate_text = ""
+     #Whicher one of those sruvival rates is the highest is displated as the heighest by which ever text coincides with it
+     
+     #Children demographics
      if highest_surv_rate == c_fc_m:
            highest_surv_rate_text = c_fc_m_text
      elif highest_surv_rate == c_fc_f:
@@ -544,6 +684,8 @@ def comprehensive_report(file):
      elif highest_surv_rate == c_tc_f:
            highest_surv_rate_text = c_tc_f_text
 
+
+     #Adult demographics
      elif highest_surv_rate == a_fc_m:
            highest_surv_rate_text = a_fc_m_text
      elif highest_surv_rate == a_fc_f:
@@ -557,6 +699,8 @@ def comprehensive_report(file):
      elif highest_surv_rate == a_fc_m:
            highest_surv_rate_text = a_tc_f_text
 
+
+     #Seniot demographics
      elif highest_surv_rate == s_fc_m:
            highest_surv_rate_text = s_fc_m_text
      elif highest_surv_rate == s_fc_f:
@@ -571,11 +715,12 @@ def comprehensive_report(file):
            highest_surv_rate_text = s_tc_f_text
 
      
+     #Make columns to be put into a new csv file
      columns = f"""Total Passangers, Total Survived, Total Survival %, Men Survival %, Women Survival %, First Class Survived %, Second Class Survived %, Third Class Survived %, Child Survived %, Adult Survived %, Senior Survived %, Most Likely To Survived,
-     {total_p}, {survivors}, {survival_rate:.2f}, {men_survival_rate:.2f}, {women_survival_rate:.2f}, {(afcsr*100):.2f}, {(ascsr)*100:.2f}, {(atcsr)*100:.2f}, {child_surv_rate:.2f}, {adult_surv_rate:.2f}, {senior_surv_rate:.2f}, {highest_surv_rate_text}
+     {total_p}, {survivors}, {survival_rate:.2f}, {men_survival_rate:.2f}, {women_survival_rate:.2f}, {(avg_first_clas_survival_rate*100):.2f}, {(avg_second_clas_survival_rate)*100:.2f}, {(avg_third_clas_survival_rate)*100:.2f}, {child_surv_rate:.2f}, {adult_surv_rate:.2f}, {senior_surv_rate:.2f}, {highest_surv_rate_text}
      """
 
-
+     #Make a new csv file and add the column above
      with open('Comprehensive_Report.csv', 'w') as CR_file:
           CR_file.write(columns)
      
@@ -625,7 +770,7 @@ def main():
 
      ''')
                if options == "1":
-                    LDD(file)
+                    load_and_display(file)
                elif options == "2":
                     calc_surv(file)
                elif options == "3":
