@@ -1,0 +1,335 @@
+import random
+import pygame
+import time
+
+
+'''
+Name: Charlie Gordon
+Description: Play battleship against and AI and find where his ships are on a board within 10 turns
+Date: 5/6/26
+Bugs: N/A
+Sources: pygame, w3schools
+Log: 1.0
+'''
+
+
+def ai(player_board):
+    '''
+    Args:
+    player_board (Mega list)
+
+    Returns:
+    N/A
+
+    Summary:
+    Randomly chooses a spot on the player's board and checks if it has a battleship, it it does it is marked as a hit and if not it is marked as a miss
+    '''
+
+
+
+    print('Alright now its the challengers move!')
+    sound('explosion')
+    while True:
+        #Choose random row and column
+        battleship_row = random.randint(0,4)
+        battleship_column = random.randint(0,4)
+
+
+        #If if it's empty
+        if player_board[battleship_row][battleship_column] == 'X':
+            player_board[battleship_row][battleship_column] = '🌊'
+            print(f'The challenger missed, hitting Row {battleship_row+1}, Column {battleship_column+1}')
+            
+            return False
+        #If it has a ship
+        elif  player_board[battleship_row][battleship_column] == 'B':
+            player_board[battleship_row][battleship_column] = '💥'
+            print(f'The challenger hit, hitting Row {battleship_row+1}, Column {battleship_column+1}')
+            
+            return True
+        #If that spot has already been hit
+        else:
+            pass
+
+
+
+def p_board(player_board, num_of_dots):
+    '''
+    Args:
+    player_board (Mega list), num_of_dots(int)
+
+    Returns:
+    N/A
+
+    Summary:
+    Changes the playerboard to have B's in the spots on the board the user chose
+    '''
+    print('choose your dots location')
+    count=0
+    display_board(player_board)
+    #Makes sure this runs until there are the number of ships the user wants
+    while count < num_of_dots:
+            row = input(f'what row do you want for your board(type 1, 2 or 3 or 4 or 5) ')
+            #If it fits on the board
+            if row == '1' or row == '2' or row == '3' or row == '4' or row == '5':
+                pass
+            else:
+                print('impossible')
+                continue
+            column = input('what column do you want(type 1, 2 or 3 or 4 or 5) ')
+            #If it fits on the board
+            if column == '1' or column == '2' or column == '3' or column == '4' or column == '5':
+                #If that spot is empty
+                if player_board[(int(row)-1)][(int(column)-1)] == 'X':
+                    count = count + 1
+                    player_board[(int(row)-1)][(int(column)-1)] = 'B'
+                    display_board(player_board)
+                else:
+                    print('already hit there')
+            else:
+                print('impossible')
+                continue
+    print('Okay now begin the Game!!!!')
+    #Wait 3 secs
+    time.sleep(3)
+
+
+
+def sound(noise):
+    '''
+    Args:
+    noise(mp3)
+
+    Returns:
+    sound to the computer
+
+    Summary:
+    Plays the mp3 noise in the arguement
+    '''
+    #IMPORTANT NOTE, MP3 MUST BE IN YOUR FILE WITH THE CODE!!!!!!!
+
+    #initiate the pygame import
+    pygame.init()
+
+    #begin Mixer
+    pygame.mixer.init()
+
+    #Load the mp3 sound you want
+    pygame.mixer.music.load(f"{noise}.mp3")
+
+    #Set volume
+    pygame.mixer.music.set_volume(0.7)
+
+    #Play that noise
+    pygame.mixer.music.play()
+
+    #Wait 3 seconds and end the noise
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(3)
+
+
+    pygame.quit()
+
+
+
+def display_board(board):
+    '''
+    Args:
+    Board(Mega List)
+
+    Returns:
+    Board in from of a str
+
+    Summary:
+    Takes the actual board and makes it look nicer for the user:
+
+    X X X X X
+    X X X X X
+    X X X X X
+    X X X X X
+    X X X X X
+    '''
+    print(f'''
+
+{board[0][0]}   {board[0][1]}   {board[0][2]}   {board[0][3]}   {board[0][4]}  
+{board[1][0]}   {board[1][1]}   {board[1][2]}   {board[1][3]}   {board[1][4]} 
+{board[2][0]}   {board[2][1]}   {board[2][2]}   {board[2][3]}   {board[2][4]} 
+{board[3][0]}   {board[3][1]}   {board[3][2]}   {board[3][3]}   {board[3][4]} 
+{board[4][0]}   {board[4][1]}   {board[4][2]}   {board[4][3]}   {board[4][4]} 
+
+
+''')
+
+
+
+def player_move(rows_with_battleships, columns_with_battleships,num_of_dots, board):
+        '''
+        Args:
+        rows_with_battleships(list), columns_with_battleship(list), num_of_dots(int), turn(int)
+
+        Returns:
+        True/False(Boolean), If the users input was a hit or a miss (str)
+
+        Summary:
+        Asks the user for the row and column they would like to strike and then return if it was a hit or miss
+        '''
+        while True:
+            row = input(f'what row do you want (type 1, 2 or 3 or 4 or 5) ')
+            #If it fits on the board
+            if row == '1' or row == '2' or row == '3' or row == '4' or row == '5':
+                pass
+            #Dev tool to check where to hit to win
+            elif row == 'cheat':
+                print(f'rows: {rows_with_battleships}')
+                print(f'columns: {columns_with_battleships}')
+                continue
+            else:
+                print('impossible')
+                continue
+            column = input('what column do you want(type 1, 2 or 3 or 4 or 5) ')
+            #If it fits on the board
+            if column == '1' or column == '2' or column == '3' or column == '4' or column == '5':
+                #If that spot is empty
+                if board[(int(row)-1)][(int(column)-1)] == 'X':
+                    break
+                else:
+                    print('already hit there')
+            else:
+                print('impossible')
+                continue
+        count = 0
+        sound('explosion')
+        while count < num_of_dots:
+            #If the row is the same as one on the list
+            if (int(row)-1) == rows_with_battleships[count]:
+                #If it is on the same place in the parrallel array list of comuns
+                if (int(column)-1) == columns_with_battleships[count]: 
+                    #It was a hit
+                    board[(int(row)-1)][(int(column)-1)] = '💥'
+                    print('its a hit')
+                    #Play the good job team sound
+                    sound('gjt')
+                    #Tell the main it was a hit
+                    return True
+            #Add to the cout by one after each time
+            count = count +1
+        #If it wasn't a hit and this is empty
+        if board[(int(row)-1)][(int(column)-1)] == 'X':
+            board[(int(row)-1)][(int(column)-1)] = '🌊'
+            print('its a miss')
+            #Play the mission failed we'll get em next time sound
+            sound('failure')
+            
+            #Tell the main it was a miss
+            return False
+            
+           
+
+        
+        
+        
+
+
+def select_dots(num_of_dots, rows_with_battleships, columns_with_battleships, board):
+    '''
+    Args:
+    num_of_dots (int), rows_with_battleships(list), columns_with_battleships(list)
+
+    Returns:
+    Adds to the lists in args
+
+    Summary:
+    Selects where the random dots on the board will be
+    '''
+    count = num_of_dots
+
+
+    #While there are still dots to put on to the baord as of the users request
+    while count > 0:
+        #Rows and columns are randomly decided between 0 and 4 (appears 1-5 for user)
+        battleship_row = random.randint(0,4)
+        battleship_column = random.randint(0,4)
+        #If its empty
+        if board[battleship_row][battleship_column] == 'X':
+            #Add that row and column to the list - lists parallel arrays
+            rows_with_battleships.append(battleship_row)
+            columns_with_battleships.append(battleship_column)
+            count = count-1
+    
+
+
+def main():
+    board = [
+    ["X", "X", "X", "X", "X"],
+    ["X", "X", "X", "X", "X"],
+    ["X", "X", "X", "X", "X"],
+    ["X", "X", "X", "X", "X"],
+    ["X", "X", "X", "X", "X"],
+            ]
+
+
+    player_board = [
+        ["X", "X", "X", "X", "X"],
+        ["X", "X", "X", "X", "X"],
+        ["X", "X", "X", "X", "X"],
+        ["X", "X", "X", "X", "X"],
+        ["X", "X", "X", "X", "X"],
+                ]
+    
+    #amount of dots the player has hit
+    p_dots_hit = 0
+    ai_dots_hit = 0
+    while True:
+        try:
+            #Asks the user how many dots they want on the board, max of 10
+            num_of_dots = int(input('How many battleships do you want (1-3 easy mode, 4-6 normal mode, 7-10 hard mode) '))
+            if num_of_dots > 0 and num_of_dots <= 10:
+                #move to next set
+                break
+            else:
+                print('invalid input')
+        #if they didn't put an integer
+        except ValueError:
+            print('invalid input')
+    
+    #These two lists will be parallel arrays where they will have the row and column of where the battleships are
+    rows_with_battleships = []
+    columns_with_battleships = []
+    
+    select_dots(num_of_dots, rows_with_battleships, columns_with_battleships, board)
+    p_board(player_board, num_of_dots)
+    print('Challengers board')
+    display_board(board)
+
+    print('Your board')
+    display_board(player_board)
+    while True:
+        
+        #If player got a hit
+        if player_move(rows_with_battleships, columns_with_battleships,num_of_dots, board) == True:
+            p_dots_hit = p_dots_hit + 1
+        #If the user has taken out all of the battleships
+        if p_dots_hit == num_of_dots:
+                print('you won!!!!')
+                sound('Celebration')
+                break
+        #If they didn't get a hit
+        if ai(player_board) == True:
+            ai_dots_hit = ai_dots_hit + 1
+            if ai_dots_hit == num_of_dots:
+                print('you lost :(')
+                sound('cyaf')
+                break
+        print('Challengers board')
+        display_board(board)
+
+        print('Your board')
+        display_board(player_board)
+        
+
+        
+
+main()
+
+
+
