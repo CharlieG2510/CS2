@@ -37,13 +37,13 @@ def ai(player_board):
 
         #If if it's empty
         if player_board[battleship_row][battleship_column] == 'X':
-            player_board[battleship_row][battleship_column] = '🌊'
+            player_board[battleship_row][battleship_column] = '💧'
             print(f'The challenger missed, hitting Row {battleship_row+1}, Column {battleship_column+1}')
             
             return False
         #If it has a ship
-        elif  player_board[battleship_row][battleship_column] == 'B':
-            player_board[battleship_row][battleship_column] = '💥'
+        elif  player_board[battleship_row][battleship_column] == '𓊝':
+            player_board[battleship_row][battleship_column] = '💣'
             print(f'The challenger hit, hitting Row {battleship_row+1}, Column {battleship_column+1}')
             
             return True
@@ -82,10 +82,10 @@ def p_board(player_board, num_of_dots):
                 #If that spot is empty
                 if player_board[(int(row)-1)][(int(column)-1)] == 'X':
                     count = count + 1
-                    player_board[(int(row)-1)][(int(column)-1)] = 'B'
+                    player_board[(int(row)-1)][(int(column)-1)] = '𓊝'
                     display_board(player_board)
                 else:
-                    print('already hit there')
+                    print('already ship there')
             else:
                 print('impossible')
                 continue
@@ -143,11 +143,11 @@ def display_board(board):
     Summary:
     Takes the actual board and makes it look nicer for the user:
 
-    X X X X X
-    X X X X X
-    X X X X X
-    X X X X X
-    X X X X X
+    X   X   X   X   X
+    X   X   X   X   X
+    X   X   X   X   X
+    X   X   X   X   X
+    X   X   X   X   X
     '''
     print(f'''
 
@@ -215,7 +215,7 @@ def player_move(rows_with_battleships, columns_with_battleships,num_of_dots, boa
             count = count +1
         #If it wasn't a hit and this is empty
         if board[(int(row)-1)][(int(column)-1)] == 'X':
-            board[(int(row)-1)][(int(column)-1)] = '🌊'
+            board[(int(row)-1)][(int(column)-1)] = '💧'
             print('its a miss')
             #Play the mission failed we'll get em next time sound
             sound('failure')
