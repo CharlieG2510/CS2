@@ -1,0 +1,133 @@
+"""
+Author: Charlie Gordon
+Sources, Mr. Campbell, Assignment Sheet
+Description: Does different math functions based off of numbers inputed by user using recursions
+Graded by: Jeret
+Bugs:Product doens't work with negative numbers (user prevented form typing negative numbers because of this)
+
+Log: 1.0 C.G
+"""
+
+def factorial(n):
+    #If the number is 0
+    if n == 0:
+        return 1
+    #Else do the number times (one less itself until it reaches 0)
+    return n * factorial(n-1)
+def summation(n):
+    #If the number is great than 0
+    if n > 0:
+        #Do the number plus itself until it reaches 0
+        return n +summation(n-1)
+    #If its 0
+    if n == 0:
+        return 0
+def powers(a, n):
+    if n > 0:
+        #Multiply by itself until n has run out
+        return a*powers(a, n-1)
+    if n == 0:
+        return 1
+def sum_of_num_digits(n):
+    #If single didfit
+    if n < 10:
+        return n
+    else:
+        #Add up all digits
+        return sum_of_num_digits(n//10) + n%10
+def fibbonaci(n):
+    if n==0:
+        return 0
+    if n == 1:
+        return 1
+    #Add n-1 and n-2 until n = 1 or 0
+    return fibbonaci(n-1) + fibbonaci(n-2)
+def compound_int(p,r,t):
+    if t == 0:
+        return p
+    if t > 0:
+        #* the percentage to n however many time t says
+        return (1+r) * compound_int(p,r,t-1)
+def prod_of_2_whole_numbers(a,b):
+    if b > 0:
+        #Add a to itself b times
+        return a+prod_of_2_whole_numbers(a,b-1)
+    elif b == 0:
+        return 0
+def main():
+    while True:
+        #Make sure this is a number and not negative
+        try:
+            number = int(input('''what number do you want: '''))
+            if number >= 0:
+                break
+            else:
+                print('cant be negative')
+        except ValueError:
+            print('invalid input')
+    choice = input('''which function do you want: 
+                               
+1. factorial
+2. summation
+3. powers
+4. sum of digits
+5. fibbinoaci sequence
+6. compound interest
+7. product of 2 whole numbers                    
+''')
+    if choice == "1":
+        print(factorial(number))
+    elif choice == "2":
+        print(summation(number))
+    elif choice == "3":
+        while True:
+            try:
+                power_number = int(input(f'what number do you want for to be set to the power of {number}; '))
+                #Make sure this is a number and not negative
+                if power_number >= 0:
+                    break
+                else:
+                    print('cant be negative')
+            except ValueError:
+                print('invalid input')
+        print(powers(power_number, number))
+    elif choice == "4":
+        print (sum_of_num_digits(number))
+    elif choice == "5":
+        print (fibbonaci(number))
+    elif choice == "6":
+        while True:
+            #Make sure this is a number and not negative for time and just a number for percent
+            try:
+                time = int(input('how long do you want {number} to be put in compound intrest for'))
+                if time >= 0:
+                    pass
+                else:
+                    print('cant be negative')
+                    continue
+                percent = int(input('what percent do you want for the function'))/100
+                break
+            except ValueError:
+                print('invalid input')
+        print(compound_int(number, percent, time))
+    elif choice == "7":
+        while True:
+            #Make sure this is a number and not negative
+            #Code doesn't work for product if - even though the product of a negative number is technically doable
+            try:
+                second_number = int(input(f'what number do you want {number} to be multiplied by'))
+                if second_number >= 0:
+                    break
+                else:
+                    print('cant be negative')
+            except ValueError:
+                print('invalid input')
+        print(prod_of_2_whole_numbers(number, second_number))
+
+
+    
+    
+    
+
+
+main()
